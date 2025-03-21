@@ -1,0 +1,28 @@
+{
+    "user_name": {
+        "type": "string",
+        "description": "The user's preferred name"
+    },
+    "age": {
+        "type": "integer",
+        "description": "The user's age"
+    },
+    "interests": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "A list of the user's interests"
+    },
+    "home": {
+        "type": "string",
+        "description": "Description of the user's home town/neighborhood, etc."
+    },
+    "occupation": {
+        "type": "string",
+        "description": "The user's current occupation or profession"
+    },
+    "conversation_preferences": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "A list of the user's preferred conversation styles, pronouns, topics they want to avoid, etc."
+    }
+}
