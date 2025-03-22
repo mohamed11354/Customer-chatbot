@@ -6,6 +6,7 @@ from langgraph.graph.message import add_messages
 from langchain_together import ChatTogether
 from langgraph.store.memory import InMemoryStore
 from langchain_core.runnables.graph import  MermaidDrawMethod
+from langchain_community.vectorstores import Chroma
 import os
 import json
 
