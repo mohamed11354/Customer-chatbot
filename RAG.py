@@ -1,5 +1,4 @@
 from typing import List, Union
-import requests
 from langchain_community.document_loaders import WebBaseLoader, pdf
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
