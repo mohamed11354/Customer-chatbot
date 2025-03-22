@@ -1,6 +1,6 @@
 from typing import List, Union
 import requests
-from langchain_community.document_loaders import WebBaseLoader, TextLoader
+from langchain_community.document_loaders import WebBaseLoader, pdf
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_together import TogetherEmbeddings
@@ -17,7 +17,7 @@ class RAGManager:
         """
         self.embeddings = TogetherEmbeddings(model=embedding_model)
         self.vector_store = None  # Lazy initialization of FAISS store
-        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
 
     def load_documents(self, sources: Union[str, List[str]]) -> List[Document]:
         """
@@ -34,7 +34,7 @@ class RAGManager:
             if source.startswith("http"):  # Load from URL
                 loader = WebBaseLoader(source)
             elif os.path.exists(source):  # Load from a text file
-                loader = TextLoader(source)
+                loader = pdf.PDFMinerLoader(source)
             else:
                 raise ValueError(f"Invalid source: {source}. Must be a URL or a valid file path.")
 
@@ -56,7 +56,7 @@ class RAGManager:
         else:
             self.vector_store.add_documents(split_docs)
     
-    def search(self, query: str, k: int = 5):
+    def search(self, query: str, k: int = 4):
         """
         Perform a similarity search on the vector store.
         :param query: The search query.
@@ -69,9 +69,16 @@ class RAGManager:
         results = self.vector_store.similarity_search(query, k=k)
         return [res.page_content for res in results]
 
-if __name__ == "__main__":
-    rag = RAGManager()
-    rag.process_and_index("https://cp-algorithms.com/graph/topological-sort.html")
-    results = rag.search("What is the main topic?")
-    print(results)
+
+rag = RAGManager()
+
+# Test load url
+rag.process_and_index("https://cp-algorithms.com/graph/topological-sort.html")
+results = rag.search("What is the main topic?", k = 1)
+print(results)
+
+# Test load document
+rag.process_and_index("seamcarving.pdf")
+results = rag.search("what are seams?", k = 1)
+print(results)
     
